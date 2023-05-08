@@ -6,14 +6,17 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node server/server.js",
-        "dev": "./node_modules/nodemon/bin/nodemon.js server/server"
+        "dev": "./node_modules/nodemon/bin/nodemon.js server/server",
+        "generate-vapid": "npx web-push generate-vapid-keys --json > server/vapid.json"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@dmuy/toast": "^2.0.3",
         "body-parser": "^1.20.2",
-        "express": "^4.16.3"
+        "express": "^4.16.3",
+        "urlsafe-base64": "^1.0.0",
+        "web-push": "^3.6.1"
     },
     "devDependencies": {
         "nodemon": "^1.18.4"

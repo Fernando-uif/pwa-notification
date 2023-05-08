@@ -28,7 +28,7 @@ const APP_SHELL_INMUTABLE = [
   "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js",
   "https://cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js",
   'https://unpkg.com/@dmuy/toast@2.0.3/dist/mdtoast.css',
-  'https://unpkg.com/@dmuy/toast@{version}/dist/mdtoast.js'
+  // 'https://unpkg.com/@dmuy/toast@{version}/dist/mdtoast.js'
 ];
 
 self.addEventListener("install", (e) => {

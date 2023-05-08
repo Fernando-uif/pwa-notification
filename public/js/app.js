@@ -1,12 +1,18 @@
 var url = window.location.href;
 var swLocation = "/twittor/sw.js";
-
+let swReg;
 if (navigator.serviceWorker) {
   if (url.includes("localhost")) {
     swLocation = "/sw.js";
   }
+  window.addEventListener("load", () => {
+    console.log("Ya cargo todo");
+    navigator.serviceWorker.register(swLocation).then(function (reg) {
+      swReg = reg;
 
-  navigator.serviceWorker.register(swLocation);
+      swReg.pushManager.getSubscription().then(verificaSuscripcion);
+    });
+  });
 }
 
 // Referencias de jQuery
@@ -23,6 +29,8 @@ var modal = $("#modal");
 var modalAvatar = $("#modal-avatar");
 var avatarBtns = $(".seleccion-avatar");
 var txtMensaje = $("#txtMensaje");
+const btnActivadas = $(".btn-noti-activadas");
+const btnDesactivadas = $(".btn-noti-desactivadas");
 
 // El usuario, contiene el ID del hÃ©roe seleccionado
 var usuario;
@@ -174,6 +182,16 @@ const enviarNotificacion = () => {
 };
 
 // Notificaciones
+const verificaSuscripcion = (activadas) => {
+  if (activadas) {
+    btnActivadas.removeClass("oculto");
+    btnDesactivadas.addClass("oculto");
+  } else {
+    btnActivadas.addClass("oculto");
+    btnDesactivadas.removeClass("oculto");
+  }
+};
+
 const notificarme = () => {
   if (!window.Notification) {
     console.log("Este navegador no soporta notificacione");
@@ -194,4 +212,31 @@ const notificarme = () => {
     });
   }
 };
-notificarme();
+// notificarme();
+// verificaSuscripcion();
+
+// Get Key
+const getPublicKey = () => {
+  return fetch("api/key")
+    .then((res) => res.arrayBuffer())
+    .then((key) => new Uint8Array(key));
+};
+// getPublicKey().then(console.log);
+btnDesactivadas.on("click", function () {
+  if (!swReg) return console.log("No hay registro del SW");
+  getPublicKey().then(function (key) {
+    console.log(key, "Tenemos la key");
+    swReg.pushManager
+      .subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: key,
+      })
+      .then(function (res) {
+        return res.toJSON();
+      })
+      .then(function (suscription) {
+        console.log(suscription, "suscription");
+        verificaSuscripcion(suscription);
+      });
+  });
+});
