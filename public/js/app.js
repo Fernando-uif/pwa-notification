@@ -183,6 +183,7 @@ const enviarNotificacion = () => {
 
 // Notificaciones
 const verificaSuscripcion = (activadas) => {
+  console.log(activadas,'Tenemos activadas');
   if (activadas) {
     btnActivadas.removeClass("oculto");
     btnDesactivadas.addClass("oculto");
@@ -235,8 +236,13 @@ btnDesactivadas.on("click", function () {
         return res.toJSON();
       })
       .then(function (suscription) {
-        console.log(suscription, "suscription");
-        verificaSuscripcion(suscription);
+        fetch("api/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(suscription),
+        })
+          .then(verificaSuscripcion)
+          .catch(console.log);
       });
   });
 });
