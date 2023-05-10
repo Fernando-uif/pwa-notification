@@ -183,7 +183,7 @@ const enviarNotificacion = () => {
 
 // Notificaciones
 const verificaSuscripcion = (activadas) => {
-  console.log(activadas,'Tenemos activadas');
+  console.log(activadas, "Tenemos activadas");
   if (activadas) {
     btnActivadas.removeClass("oculto");
     btnDesactivadas.addClass("oculto");
@@ -226,7 +226,6 @@ const getPublicKey = () => {
 btnDesactivadas.on("click", function () {
   if (!swReg) return console.log("No hay registro del SW");
   getPublicKey().then(function (key) {
-    console.log(key, "Tenemos la key");
     swReg.pushManager
       .subscribe({
         userVisibleOnly: true,
@@ -242,7 +241,17 @@ btnDesactivadas.on("click", function () {
           body: JSON.stringify(suscription),
         })
           .then(verificaSuscripcion)
-          .catch(console.log);
+          .catch(cancelarSuscripcion);
       });
   });
+});
+
+const cancelarSuscripcion = () => {
+  swReg.pushManager.getSubscription().then((subs) => {
+    subs.unsubscribe().then(() => verificaSuscripcion(false));
+  });
+};
+
+btnActivadas.on("click", function () {
+  cancelarSuscripcion();
 });
