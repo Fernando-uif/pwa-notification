@@ -9,8 +9,10 @@
         "dev": "node ./node_modules/nodemon/bin/nodemon.js server/server --ignore server/*.json ",
         "generate-vapid": "npx web-push generate-vapid-keys --json > server/vapid.json"
     },
-    "nodemonConfig":{
-        "ignore":["server/*.json"]
+    "nodemonConfig": {
+        "ignore": [
+            "server/*.json"
+        ]
     },
     "author": "",
     "license": "ISC",
@@ -22,6 +24,6 @@
         "web-push": "^3.6.1"
     },
     "devDependencies": {
-        "nodemon": "^1.18.4"
+        "nodemon": "^2.0.22"
     }
 }
